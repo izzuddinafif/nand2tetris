@@ -1,0 +1,56 @@
+// --- Program Setup ---
+000A  // @10
+EC10  // D=A
+0010  // @n (variable n at RAM[16])
+E388  // M=D-1 set n to 9 to make an exit condition
+
+// --- Initialize loop counter i ---
+// Assembler resolved @i to its address, RAM[17]
+0001  // @1
+EC10  // D=A
+0011  // @i
+E308  // M=D
+
+// --- Initialize fib[0] and fib[1] ---
+// Assembler resolved @fib to its address, RAM[18]
+0012  // @fib
+EFC8  // M=1
+EDE0  // A=A+1
+EFC8  // M=1
+
+// --- Main Loop (starts at instruction 12) ---
+// (LOOP)
+// Assembler resolved @i to @17 and @n to @16
+0011  // @i
+FC10  // D=M
+0010  // @n
+F4D0  // D=D-M
+// Assembler resolved @END to instruction 32
+0020  // @END
+E302  // D;JEQ
+
+// --- Fibonacci Calculation ---
+// Assembler resolved @i to @17 and @fib to @18
+0011  // @i
+FC10  // D=M
+0012  // @fib
+E0A0  // A=D+A
+FC10  // D=M
+ECA0  // A=A-1
+F090  // D=D+M
+EDE0  // A=A+1
+EDE0  // A=A+1
+E308  // M=D
+
+// --- Loop Control ---
+// Assembler resolved @i to @17 and @LOOP to instruction 12
+0011  // @i
+FDC8  // M=M+1
+000C  // @LOOP
+EA87  // 0;JMP
+
+// --- End of Program (starts at instruction 32) ---
+// (END)
+// Assembler resolved @END to instruction 32
+0020  // @END
+EA87  // 0;JMP
